@@ -2,10 +2,9 @@ package main
 
 import (
 	"log"
-	"os"
-	"os/signal"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/zigzter/league-predictions/models"
 )
 
 func main() {
@@ -15,6 +14,10 @@ func main() {
 	}
 	defer f.Close()
 
-	shutdown := make(chan os.Signal, 1)
-	signal.Notify(shutdown, os.Interrupt)
+	m := models.InitialRootModel()
+	p := tea.NewProgram(m)
+
+	if _, err := p.Run(); err != nil {
+		log.Fatal(err.Error())
+	}
 }
