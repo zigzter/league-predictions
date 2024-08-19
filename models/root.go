@@ -2,6 +2,7 @@ package models
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/zigzter/league-predictions/utils"
 )
 
 type sessionState int
@@ -11,8 +12,7 @@ type ChangeStateMsg struct {
 }
 
 const (
-	playerNameView sessionState = iota
-	authKeyView
+	configView sessionState = iota
 	choosePredView
 	chooseOptionsView
 	waitingView
@@ -25,15 +25,19 @@ type RootModel struct {
 }
 
 func InitRootModel() RootModel {
-	playerNameModel := InitPlayerNameModel()
-	authKeyModel := InitAuthKeyModel()
+	configModel := InitConfigModel()
 	choosePredModel := InitChoosePredModel()
+	isConfigEntryRequired := utils.IsConfigEntryRequired()
+	state := sessionState(1)
+	if isConfigEntryRequired {
+		state = sessionState(0)
+	}
 	m := RootModel{
 		models: map[sessionState]tea.Model{
-			playerNameView: playerNameModel,
-			authKeyView:    authKeyModel,
+			configView:     configModel,
 			choosePredView: choosePredModel,
 		},
+		state: state,
 	}
 	return m
 }

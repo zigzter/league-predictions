@@ -8,14 +8,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-func IsPlayerNameMissing() bool {
-	name := viper.GetString(PlayerNameKey)
-	return name == ""
-}
-
-func IsAuthKeyMissing() bool {
-	key := viper.GetString(AuthKey)
-	return key == ""
+func IsConfigEntryRequired() bool {
+	playerName := viper.GetString(PlayerNameKey)
+	riotAPIKey := viper.GetString(RiotAPIKey)
+	return playerName == "" || riotAPIKey == ""
 }
 
 func createConfigDir(path string) error {
@@ -65,7 +61,7 @@ func InitConfig() {
 
 func isValidConfigKey(key string) bool {
 	switch key {
-	case PlayerNameKey, AuthKey:
+	case PlayerNameKey, RiotAPIKey:
 		return true
 	}
 	return false
