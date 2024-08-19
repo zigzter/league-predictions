@@ -5,6 +5,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/zigzter/league-predictions/utils"
 )
 
 type AuthKeyModel struct {
@@ -25,6 +26,13 @@ func (m AuthKeyModel) Init() tea.Cmd {
 }
 
 func (m AuthKeyModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "enter":
+			utils.SaveConfig(utils.AuthKey, m.textinput.Value())
+		}
+	}
 	var textinputCmd tea.Cmd
 	m.textinput, textinputCmd = m.textinput.Update(msg)
 	return m, textinputCmd

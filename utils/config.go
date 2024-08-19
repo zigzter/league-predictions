@@ -10,7 +10,12 @@ import (
 
 func IsPlayerNameMissing() bool {
 	name := viper.GetString(PlayerNameKey)
-	return name != ""
+	return name == ""
+}
+
+func IsAuthKeyMissing() bool {
+	key := viper.GetString(AuthKey)
+	return key == ""
 }
 
 func createConfigDir(path string) error {

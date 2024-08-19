@@ -2,6 +2,7 @@ package models
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/zigzter/league-predictions/utils"
 )
 
 type sessionState int
@@ -28,10 +29,15 @@ type RootModel struct {
 func InitRootModel() RootModel {
 	playerNameModel := InitPlayerNameModel()
 	authKeyModel := InitAuthKeyModel()
-	return RootModel{
+	m := RootModel{
 		playerName: playerNameModel,
 		authKey:    authKeyModel,
 	}
+	isAuthKeyMissing := utils.IsAuthKeyMissing()
+	if isAuthKeyMissing {
+		m.state = authKeyView
+	}
+	return m
 }
 
 func (m RootModel) Init() tea.Cmd {
