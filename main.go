@@ -14,7 +14,7 @@ func main() {
 	}
 	defer f.Close()
 
-	m := models.InitialRootModel()
+	m := models.InitRootModel()
 	p := tea.NewProgram(m)
 
 	if _, err := p.Run(); err != nil {

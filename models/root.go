@@ -4,26 +4,30 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-type AppState int
+type sessionState int
 
 type ChangeStateMsg struct {
-	NewState AppState
+	NewState sessionState
 }
 
 const (
-	PlayerNameState AppState = iota
-	ChoosePredState
-	ChooseOptionsState
-	WaitingState
-	InProgressState
+	playerNameView sessionState = iota
+	choosePredView
+	chooseOptionsView
+	waitingView
+	inProgressView
 )
 
 type RootModel struct {
-	State AppState
+	state      sessionState
+	playerName tea.Model
 }
 
-func InitialRootModel() RootModel {
-	return RootModel{}
+func InitRootModel() RootModel {
+	playerNameModel := InitPlayerNameModel()
+	return RootModel{
+		playerName: playerNameModel,
+	}
 }
 
 func (m RootModel) Init() tea.Cmd {
@@ -38,9 +42,26 @@ func (m RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 	}
-	return m, nil
+
+	var cmd tea.Cmd
+	switch m.state {
+	case playerNameView:
+		newPlayerName, newCmd := m.playerName.Update(msg)
+		playerModel, ok := newPlayerName.(PlayerNameModel)
+		if !ok {
+			panic("could not perform assertion on playerName model")
+		}
+		m.playerName = playerModel
+		cmd = newCmd
+	}
+	return m, cmd
 }
 
 func (m RootModel) View() string {
-	return "Root model"
+	switch m.state {
+	case playerNameView:
+		return m.playerName.View()
+	default:
+		return ""
+	}
 }
