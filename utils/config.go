@@ -57,3 +57,21 @@ func InitConfig() {
 		}
 	}
 }
+
+func isValidConfigKey(key string) bool {
+	switch key {
+	case PlayerNameKey, AuthKey:
+		return true
+	}
+	return false
+}
+
+func SaveConfig(key string, value string) {
+	if !isValidConfigKey(key) {
+		log.Fatalln("Invalid config key:", key)
+	}
+	viper.Set(key, value)
+	if err := viper.WriteConfig(); err != nil {
+		log.Println("Error saving config:", err.Error())
+	}
+}

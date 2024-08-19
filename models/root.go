@@ -12,6 +12,7 @@ type ChangeStateMsg struct {
 
 const (
 	playerNameView sessionState = iota
+	authKeyView
 	choosePredView
 	chooseOptionsView
 	waitingView
@@ -21,12 +22,15 @@ const (
 type RootModel struct {
 	state      sessionState
 	playerName tea.Model
+	authKey    tea.Model
 }
 
 func InitRootModel() RootModel {
 	playerNameModel := InitPlayerNameModel()
+	authKeyModel := InitAuthKeyModel()
 	return RootModel{
 		playerName: playerNameModel,
+		authKey:    authKeyModel,
 	}
 }
 
@@ -53,6 +57,14 @@ func (m RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		m.playerName = playerModel
 		cmd = newCmd
+	case authKeyView:
+		newAuthKey, newCmd := m.authKey.Update(msg)
+		authKeyModel, ok := newAuthKey.(AuthKeyModel)
+		if !ok {
+			panic("could not perform assertion on authKey model")
+		}
+		m.authKey = authKeyModel
+		cmd = newCmd
 	}
 	return m, cmd
 }
@@ -61,6 +73,8 @@ func (m RootModel) View() string {
 	switch m.state {
 	case playerNameView:
 		return m.playerName.View()
+	case authKeyView:
+		return m.authKey.View()
 	default:
 		return ""
 	}
