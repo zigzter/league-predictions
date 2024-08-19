@@ -5,6 +5,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/zigzter/league-predictions/utils"
 )
 
 type PlayerNameModel struct {
@@ -26,6 +27,14 @@ func (m PlayerNameModel) Init() tea.Cmd {
 }
 
 func (m PlayerNameModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "enter":
+			utils.SaveConfig(utils.PlayerNameKey, m.textinput.Value())
+			return ChangeView(m, choosePredView)
+		}
+	}
 	var textinputCmd tea.Cmd
 	m.textinput, textinputCmd = m.textinput.Update(msg)
 	return m, textinputCmd

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"log"
 	"strings"
 
 	"github.com/charmbracelet/bubbles/textinput"
@@ -31,7 +32,10 @@ func (m AuthKeyModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "enter":
 			utils.SaveConfig(utils.AuthKey, m.textinput.Value())
+			return ChangeView(m, choosePredView)
 		}
+	case error:
+		log.Println("Error: ", msg.Error())
 	}
 	var textinputCmd tea.Cmd
 	m.textinput, textinputCmd = m.textinput.Update(msg)
