@@ -18,7 +18,7 @@ func main() {
 	defer f.Close()
 
 	m := models.InitRootModel()
-	p := tea.NewProgram(m)
+	p := tea.NewProgram(m, tea.WithAltScreen())
 
 	if _, err := p.Run(); err != nil {
 		log.Fatal(err.Error())

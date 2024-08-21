@@ -27,6 +27,7 @@ type RootModel struct {
 func InitRootModel() RootModel {
 	configModel := InitConfigModel()
 	choosePredModel := InitChoosePredModel()
+	chooseOptionsModel := InitChooseOptionsModel()
 	isConfigEntryRequired := utils.IsConfigEntryRequired()
 	state := sessionState(1)
 	if isConfigEntryRequired {
@@ -34,8 +35,9 @@ func InitRootModel() RootModel {
 	}
 	m := RootModel{
 		models: map[sessionState]tea.Model{
-			configView:     configModel,
-			choosePredView: choosePredModel,
+			configView:        configModel,
+			choosePredView:    choosePredModel,
+			chooseOptionsView: chooseOptionsModel,
 		},
 		state: state,
 	}

@@ -61,7 +61,7 @@ func InitConfig() {
 
 func isValidConfigKey(key string) bool {
 	switch key {
-	case PlayerNameKey, RiotAPIKey:
+	case PlayerNameKey, RiotAPIKey, PredictionKey:
 		return true
 	}
 	return false
