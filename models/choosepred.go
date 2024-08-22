@@ -69,7 +69,7 @@ func (m ChoosePredModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				log.Fatalln("Item assertion error")
 			}
 			utils.SaveConfig(utils.PredictionKey, choice.Title())
-			return ChangeView(m, chooseOptionsView)
+			return ChangeView(m, chooseOptionsView, choice.Title())
 		}
 	}
 	var cmd tea.Cmd

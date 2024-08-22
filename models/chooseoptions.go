@@ -2,8 +2,6 @@ package models
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/spf13/viper"
-	"github.com/zigzter/league-predictions/utils"
 )
 
 type ChooseOptionsModel struct {
@@ -21,9 +19,9 @@ func (m ChooseOptionsModel) Init() tea.Cmd {
 }
 
 func (m ChooseOptionsModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	switch msg.(type) {
-	case tea.WindowSizeMsg:
-		prediction := viper.GetString(utils.PredictionKey)
+	switch msg := msg.(type) {
+	case ChangeViewMsg:
+		prediction := msg.state.(string)
 		m.prediction = prediction
 	}
 	return m, nil

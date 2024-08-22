@@ -7,8 +7,9 @@ import (
 
 type sessionState int
 
-type ChangeStateMsg struct {
-	NewState sessionState
+type ChangeViewMsg struct {
+	newView sessionState
+	state   any
 }
 
 const (
@@ -62,9 +63,8 @@ func (m RootModel) PropagateUpdate(msg tea.Msg) tea.Cmd {
 
 func (m RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case ChangeStateMsg:
-		m.state = msg.NewState
-		return m, nil
+	case ChangeViewMsg:
+		m.state = msg.newView
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "ctrl+c":

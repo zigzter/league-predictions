@@ -44,7 +44,7 @@ func (m ConfigModel) SaveConfig(shouldSave bool) {
 	if shouldSave {
 		utils.SaveConfig(utils.RiotAPIKey, m.form.GetString("riot-api-key"))
 		utils.SaveConfig(utils.PlayerNameKey, m.form.GetString("player-name"))
-		ChangeView(m, choosePredView)
+		ChangeView(m, choosePredView, nil)
 	}
 }
 
@@ -60,7 +60,7 @@ func (m ConfigModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmds = append(cmds, cmd)
 	}
 	if m.form.State == huh.StateCompleted {
-		return ChangeView(m, choosePredView)
+		return ChangeView(m, choosePredView, nil)
 	}
 	return m, tea.Batch(cmds...)
 }
