@@ -11,7 +11,8 @@ import (
 func IsConfigEntryRequired() bool {
 	playerName := viper.GetString(PlayerNameKey)
 	riotAPIKey := viper.GetString(RiotAPIKey)
-	return playerName == "" || riotAPIKey == ""
+	twitchToken := viper.GetString(TwitchTokenKey)
+	return playerName == "" || riotAPIKey == "" || twitchToken == ""
 }
 
 func createConfigDir(path string) error {
