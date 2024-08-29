@@ -1,7 +1,11 @@
 package models
 
 import (
+	"os"
+
+	"github.com/charmbracelet/bubbles/cursor"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/zigzter/league-predictions/utils"
 )
 
@@ -23,9 +27,10 @@ const (
 type RootModel struct {
 	state  sessionState
 	models map[sessionState]tea.Model
+	dump   *os.File
 }
 
-func InitRootModel() RootModel {
+func InitRootModel(dump *os.File) RootModel {
 	configModel := InitConfigModel()
 	choosePredModel := InitChoosePredModel()
 	chooseOptionsModel := InitChooseOptionsModel()
@@ -35,6 +40,7 @@ func InitRootModel() RootModel {
 		state = sessionState(0)
 	}
 	m := RootModel{
+		dump: dump,
 		models: map[sessionState]tea.Model{
 			configView:        configModel,
 			choosePredView:    choosePredModel,
@@ -62,6 +68,11 @@ func (m RootModel) PropagateUpdate(msg tea.Msg) tea.Cmd {
 }
 
 func (m RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	if m.dump != nil {
+		if _, ok := msg.(cursor.BlinkMsg); !ok {
+			spew.Fdump(m.dump, msg)
+		}
+	}
 	switch msg := msg.(type) {
 	case ChangeViewMsg:
 		m.state = msg.newView
